@@ -1,15 +1,16 @@
 const express = require('express')
-
-const PORT = 3000;
-const HOST = '0.0.0.0';
+const routes = require('./routes');
 
 const app = express();
 
-app.get('/',(req,res)=>{
-    res.send('Hello World! teste');
-})
+app.use(routes);
 
-app.listen(PORT,HOST);
+module.exports = app;
+
+// app.get('/',(req,res)=>{
+//     res.send('Hello World! teste');
+// })
+
 
 // docker run -p 3000:3000 -d gillo/dockernode
 // docker build -t gillo/dockernode .

@@ -27,8 +27,8 @@ services:
     image: dpage/pgadmin4
     restart: always
 
-    volumes:
-      - ./data/pgadmin-data:/var/lib/pgadmin
+    # volumes:
+    #   - ./data/pgadmin-data:/var/lib/pgadmin
 
     environment:
       PGADMIN_DEFAULT_EMAIL: root@root.com
@@ -36,15 +36,15 @@ services:
       # PGADMIN_LISTEN_PORT = 80
     ports:
       - "5050:80"
-    networks:
-      app_net:
-        # ip addr show
-        ipv4_address: 172.18.0.1
+    # networks:
+    #   app_net:
+    #     # ip addr show
+    #     ipv4_address: 172.18.0.1
 
-networks:
-  app_net:
-    ipam:
-      driver: default
-      config:
-        - subnet: "172.18.0.1/16"
-          gateway: 172.18.0.1
+# networks:
+#   app_net:
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: "172.18.0.1/16"
+#           gateway: 172.18.0.1
