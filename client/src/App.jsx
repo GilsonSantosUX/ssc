@@ -11,9 +11,10 @@ function App() {
         "Content-type": "application/json",
         "Access-Control-Allow-Origin":"*",
     }};
+  const baseURL = "https://localhost:3000"; // https://3000-gilsonsantosux-ssc-2mo4lg2dkzl.ws-us44.gitpod.io
 
   useEffect(()=>{
-     fetch("https://3000-gilsonsantosux-ssc-2mo4lg2dkzl.ws-us44.gitpod.io/home",headers).then(response=>response).then(data=>{
+     fetch(`${baseURL}/home`,headers).then(response=>response).then(data=>{
       console.log(data);
      })
   });
