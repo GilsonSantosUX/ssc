@@ -26,8 +26,3 @@ module.exports = {
     getAll,
     getQuantity
 }
-
-db.run("SELECT tbl SET name = $name WHERE id = $id", {
-    $id: 2,
-    $name: "bar"
-});
