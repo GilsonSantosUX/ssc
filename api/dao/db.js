@@ -12,7 +12,8 @@ const db = connect(DBSOURCE);
 
   async function set(rga, name,course,situation,createdIn) {
     await prepared;
-    await db.query(sql`INSERT INTO std(rga,name,course,situation,createdIn) VALUES (${rga},${name},${course},${situation},${createdIn});`);
+    const data = await db.query(sql`INSERT INTO std(rga,name,course,situation,createdIn) VALUES (${rga},${name},${course},${situation},${createdIn});`);
+    return data;
   }
 
   async function get({offset=0,limit=20}){
@@ -27,46 +28,33 @@ const db = connect(DBSOURCE);
       return results;
   }
 
-  async function run() {
-    await set('2018.1902.060-6','Gilson Santos','TADS','Ativo',new Date().toISOString());
-    await set('2019.1902.060-6','Jeferson Lima','TADS','Ativo',new Date().toISOString());
-  }
-  async function postInsert({rga,name,course,situation}) {
-    await set(rga,name,course,situation,new Date().toISOString());
-    return 200;
+  async function  getAluno({name}){
+    await prepared;
+    const results = await db.query(sql`SELECT * FROM std WHERE name LIKE ${name} ;`);
+      return results;
   }
 
-// let db = new sqlite3.Database(DBSOURCE, (err) => {
-//     if (err) {
-//       console.error(db);
-//       throw err;
-//     } else {
-//       console.log('Connected to the SQLite database.');
-//       db.run("CREATE TABLE IF NOT EXISTS std(id INTEGER PRIMARY KEY AUTOINCREMENT,rga text NOT NULL,name text NOT NULL,course text,situation text ,createdIn CURRENT_TIMESTAMP)",
-//       (err)=>{
-//           if (err) {
-//             console.log('Table already created');
-//             // Table already created
-//           }else{
-//               console.log('Table just created, creating some rows');
-//               // Table just created, creating some rows
-//               let insert = 'INSERT INTO std(rga,name,course,situation,createdIn) VALUES (?,?,?,?,?);';
-//               db.run(insert,['2018.1902.060-6','Gilson Santos','TADS','Ativo','09:02:04']);
-//           }
-//       });
-//     }
-//   })
 
-  // function insert(db){
-  //   let insert = 'INSERT INTO std(rga,name,course,situation,createdIn) VALUES (?,?,?,?,?);';
-  //     db.run(insert,['2018.1902.060-6','Gilson Santos','TADS','Ativo','09:02:04']);
-  // }
+  async function insertAluno({rga,name,course}) {
+    await prepared;
+    const date = new Date().toISOString();
+    const situation = "Ativo";
+    const data = await set(rga,name,course,situation,date);
+    return data;
+  }
+
+  async function deleteAluno({id}) {
+    await prepared;
+    await db.query(sql`DELETE FROM std WHERE id = ${id};`);
+    return true;
+  }
 
 module.exports = {
   db,
-  set,
   get,
+  getAluno,
   getId,
-  postInsert,
-  run
+  insertAluno,
+  deleteAluno,
+
 };

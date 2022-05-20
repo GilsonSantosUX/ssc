@@ -24,30 +24,45 @@ routes.get('/', (req, res) =>{
 // GET API
 // URL_BASE/std?offset=20&limit=5
 // Return rows started offset indice 20 and limit rows 5
-routes.get('/std',(req,res)=>{
+routes.get('/alunos',(req,res)=>{
     res.set(headers);
-    let data = db.get(req.query);
+    let data;
+    if(req.query?.name != undefined) data = db.getAluno(req.query);
+    else data = db.get(req.query);
+    data.then(data=>{res.status(200).json(data);}).catch(err=>console.error(err));
+})
+
+routes.get('/alunos/search',(req,res)=>{
+    res.set(headers);
+    let data = db.getAluno(req.query);
     data.then(data=>{res.status(200).json(data);}).catch(err=>console.error(err));
 })
 
 // GET API
 // URL_BASE/std/12
 // Return row equals id db
-routes.get('/std/:id',(req,res)=>{
+routes.get('/alunos/:id',(req,res)=>{
     res.set(headers);
     let response = db.getId(req.params);
     response.then(data=>res.status(200).json(data)).catch(err=>console.log(err));
 });
 
 // POST API
-// URL_BASE/insert?rga=2020202000&name=gilsonsantos&course=tdas&situation=ativo&
+// BASE_URL/insert?rga=2020202000&name=gilsonsantos&course=tdas&situation=ativo&
+// BASE_URL/insert?rga=2018.1902.060-6&name=Gilson%20Santos&course=TADS&situation=Ativo
 // Return row equals id db
-routes.get('/insert', (req, res) =>{
-    // res.set(headers);
+routes.post('/alunos/insert', (req, res) =>{
     res.set(headers);
-    //const {rga,name,course,situation} = req.params;
-    let response = db.postInsert(req.params);
-    response.then(data=>data==200? res.send({ message: 'Banco populado!' }): res.send({ message: 'Erro params!' })).catch(err=>console.log(err));
+    // let response = db.postInsert(req.query);
+    let response = db.insertAluno(req.body);
+    response.then(data=>{
+        console.log(data);
+        res.json(data);
+    }).catch(err=>console.log(err));
 })
+
+routes.delete('/alunos/delete/:id',(req,res)=>{
+    let response = db.deleteAluno(req.params);
+});
 
 module.exports=routes;
